@@ -88,3 +88,10 @@ need a VPS. The skill says so before you start rather than after.
 
 The harness checks the deployment shape, not your application logic. Keep your
 own tests.
+
+## License
+
+MIT — see [LICENSE](LICENSE). Use it, fork it, ship it.
+
+The skill describes how to deploy on a third-party platform; it is not
+affiliated with, endorsed by, or supported by Hostinger.
