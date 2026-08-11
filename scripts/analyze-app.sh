@@ -132,9 +132,16 @@ if grep -rqE "listen\(" ./*.js 2>/dev/null; then
   if grep -rqE "(migrate deploy|createTable|CREATE TABLE)" ./*.js 2>/dev/null; then
     warn "schema work appears in the entry — make sure the port opens BEFORE it, or a slow first boot reads as a dead app"
   fi
-  grep -rqE "listen\([^,)]*,\s*['\"]0\.0\.0\.0" ./*.js 2>/dev/null \
-    && ok "binds 0.0.0.0" \
-    || warn "could not confirm the listener binds 0.0.0.0 (a loopback bind is unreachable from the platform)"
+  # Either spelled out in the listen() call, or held in a variable that
+  # defaults to it — both are correct, and only checking the literal call
+  # produced a false warning on an app that was doing the right thing.
+  if grep -rqE "0\.0\.0\.0" ./*.js 2>/dev/null; then
+    ok "binds 0.0.0.0"
+  elif grep -rqE "listen\([^,)]*,\s*['\"]127\.0\.0\.1|localhost['\"]" ./*.js 2>/dev/null; then
+    block "the listener binds loopback — unreachable from the platform, every request becomes 503"
+  else
+    warn "could not confirm the listener binds 0.0.0.0 (a loopback bind is unreachable from the platform)"
+  fi
   grep -rq "process.env.PORT" ./*.js 2>/dev/null \
     && ok "reads PORT from the environment" \
     || block "does not read process.env.PORT — the platform assigns the port"
