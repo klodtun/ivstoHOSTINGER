@@ -1,6 +1,6 @@
 # ivs-to-hostinger
 
-A Claude Code skill for moving an app from **iVS** (one Docker container,
+A  skill for moving an app from **iVS** (one Docker container,
 embedded SQLite) to **Hostinger's Node hosting** (LiteSpeed, MariaDB over the
 network).
 
